@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('allowed_users', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Collection::class)->constrained('collection');
+            $table->foreignIdFor(Collection::class)->constrained('collections');
             $table->timestamps();
         });
     }
