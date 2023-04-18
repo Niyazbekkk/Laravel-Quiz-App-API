@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Collection;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,13 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 32);
-            $table->string('phone', 13)->unique();
-            $table->string('password');
-            $table->boolean('is_premium');
-            $table->boolean('is_admin');
+            $table->foreignIdFor(Collection::class)->constrained('collections');
+            $table->text('question');
+            $table->bigInteger('correct_answer')->default(1);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('questions');
     }
 };
