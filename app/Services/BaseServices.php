@@ -9,9 +9,13 @@ abstract class BaseServices
     {
         return [];
     }
+
+    /**
+     * @throws ValidationException
+     */
     public  function validate(array $data): bool
     {
-        Validator::make($data, $this->rules()->valdate());
+        Validator::make($data, $this->rules())->validate();
         return true;
     }
 }

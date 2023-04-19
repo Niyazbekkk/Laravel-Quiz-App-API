@@ -1,16 +1,18 @@
 <?php
 
 namespace App\Services\Category;
+
 use App\Models\Category;
 use App\Services\BaseServices;
 use Illuminate\Validation\ValidationException;
 
-class StoreCategory extends BaseServices
+class UpdateCategory extends BaseServices
 {
     public function rules (): array
     {
         return [
-            'name'=> 'required|unique:categories,name',
+            'id' => 'required|exists:categories,id',
+            'name'=>'required'
         ];
     }
 
@@ -19,7 +21,11 @@ class StoreCategory extends BaseServices
      */
     public function execute(array $data): Category
     {
-        $this->validate($data, $this->rules());
-        return Category::create($data);
+        $this->validate($data);
+        $categories = Category::find($data['id']);
+        $categories->update([
+            'name' => $data['name']
+        ]);
+        return $categories;
     }
 }
