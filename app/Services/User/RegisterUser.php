@@ -12,21 +12,22 @@ class RegisterUser extends BaseServices
         return [
             'name' => 'required',
             'phone' => 'required|unique:users,phone',
+            'email' => 'nullable|unique:users,phone',
             'password' => 'required|min:8',
-            'is_premium'=> 'required',
-            'is_admin'=>'required',
         ];
     }
-    public function execute(array $data): User
+    public function execute(array $data): array
     {
         $this->validate($data, $this->rules());
         $user = User::create([
             'name' => $data['name'],
             'phone' => $data['phone'],
+            'email' => $data['email'],
             'password' => $data['password'],
-            'is_premium' => $data['is_premium'],
-            'is_admin'=>$data['is_admin']
+            'is_premium' => false,
+            'is_admin'=> false,
         ]);
-        return $user;
+        $token = $user->createToken('user model', ['user'])->plainTextToken;
+        return [$user, $token];
     }
 }

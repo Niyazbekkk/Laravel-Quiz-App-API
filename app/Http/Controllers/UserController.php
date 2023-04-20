@@ -12,23 +12,24 @@ class UserController extends Controller
     public function register(Request $request)
     {
         try {
-            $user = app(RegisterUser::class)->execute([
-                'name' => $request->name,
-                'phone' => $request->phone,
-                'password' => $request->password,
-                'is_premium' => $request->is_premium,
-                'is_admin' => $request->is_admin,
+            [$user, $token] = app(RegisterUser::class)->execute($request->all());
+            return response([
+                'data' => [
+                    'name' =>$request->name,
+                    'token' => $token,
+                ],
             ]);
-            return new UserResource($user);
         }catch (ValidationException $exception){
-            return $exception->validator->errors()->all();
+            return response([
+                'errors' => $exception->validator->errors()->all(),
+            ], 422);
         }
     }
-    public function login(Request $request)
+    public function logIn(Request $request)
     {
 
     }
-    public function guest()
+    public function getMe()
     {
 
     }
